@@ -1,32 +1,42 @@
-version: "3.3"
+version: '3'
 
 services:
+  reverse-proxy:
+    # The official v2 Traefik docker image
+    image: traefik:v2.10
+    # Enables the web UI and tells Traefik to listen to docker
+    command: 
+      --api.insecure=true 
+      --providers.docker
+      --experimental.plugins.traefik-api-key-middleware.modulename=github.com/dtomlinson91/traefik-api-key-middleware
+      --experimental.plugins.traefik-api-key-middleware.version=v0.1.2
 
-  traefik:
-    image: "traefik:v2.10"
-    container_name: "traefik"
-    command:
-      - "--log.level=DEBUG"
-      - "--api.insecure=true"
-      - "--providers.docker=true"
-      - "--providers.docker.exposedbydefault=false"
-      - "--entrypoints.web.address=:80"
-      - "--experimental.plugins.traefik-jwt-plugin.modulename=github.com/team-carepay/traefik-jwt-plugin"
-      - "--experimental.plugins.traefik-jwt-plugin.version=v0.5.0"
-      - "--tracing.jaeger.samplingServerURL=http://localhost:14268/sampling"
-      - "--log.filePath=/path/to/traefik.log"
-      - "--accesslog.filepath=/path/to/access.log"
     ports:
+      # The HTTP port
       - "80:80"
+      # The Web UI (enabled by --api.insecure=true)
       - "8080:8080"
     volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock:ro"
-
+      # So that Traefik can listen to the Docker events
+      - /var/run/docker.sock:/var/run/docker.sock
+      
   whoami:
-    image: "traefik/whoami"
-    container_name: "simple-service"
+    # A container that exposes an API to show its IP address
+    image: traefik/whoami
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.whoami.rule=Host(`whoami.localhost`)"
-      - "traefik.http.routers.whoami.entrypoints=web"
+      - "traefik.http.routers.whoami.rule=Host(`whoami.docker.localhost`)"
+      - "traefik.http.services.whoami.loadbalancer.server.port=8080"
+      
+      - "traefik.http.routers.whoami.middlewares=apiKey"
+      - "traefik.http.middlewares.apiKey.plugin.traefik-api-key-middleware.authenticationHeader=true"
+      - "traefik.http.middlewares.apiKey.plugin.traefik-api-key-middleware.authenticationheaderName =X-API-KEY"
+      - "traefik.http.middlewares.apiKey.plugin.traefik-api-key-middleware.bearerHeader=true"
+      - "traefik.http.middlewares.apiKey.plugin.traefik-api-key-middleware.bearerHeaderName=Authorization"
+      - "traefik.http.middlewares.apiKey.plugin.traefik-api-key-middleware.removeHeadersOnSuccess=true"
+      - "traefik.http.middlewares.apiKey.plugin.traefik-api-key-middleware.keys=b8e471ed-9f78-4b0e-9f0d-ba3c9339f3b6"
 
+
+
+      # - "traefik.http.routers.whoami.middlewares=auth"
+      # - "traefik.http.middlewares.auth.basicauth.users=test:$$2y$$12$$ci.4U63YX83CwkyUrjqxAucnmi2xXOIlEF6T/KdP9824f1Rf1iyNG" # credentials test:test
