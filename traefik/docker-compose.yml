@@ -30,7 +30,7 @@ services:
 
     ports:
       # The HTTP port
-      - 7777:80"
+      - "7777:80"
       # The Web UI (enabled by --api.insecure=true)
       - "8888:8080"
     volumes:
