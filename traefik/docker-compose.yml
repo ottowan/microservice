@@ -1,15 +1,32 @@
 version: '3'
 
 services:
-  reverse-proxy:
+  traefik:
     # The official v2 Traefik docker image
     image: traefik:v2.10
     # Enables the web UI and tells Traefik to listen to docker
     command: 
       --api.insecure=true 
       --providers.docker
+
+      --log.filePath=/var/log/traefik/traefik.log
+      --log.level=DEBUG
+      --accesslog=true
+      --accesslog.filepath=/var/log/traefik/access.log
+      --tracing.jaeger=true
+      --tracing.jaeger.samplingServerURL=http://10.1.2.48:5778/sampling
+      --tracing.jaeger.samplingType=const
+      --tracing.jaeger.samplingParam=1.0
+      --tracing.jaeger.propagation=jaeger
+      --tracing.jaeger.collector.endpoint=http://10.1.2.48:14268/api/traces?format=jaeger.thrift
+
       --experimental.plugins.traefik-api-key-middleware.modulename=github.com/dtomlinson91/traefik-api-key-middleware
       --experimental.plugins.traefik-api-key-middleware.version=v0.1.2
+      # --experimental.plugins.traefik-real-ip.modulename=github.com/soulbalz/traefik-real-ip
+      # --experimental.plugins.traefik-real-ip.version=v1.0.3
+            # --entrypoints.web.address=:80
+      # --entryPoints.web.forwardedHeaders.insecure=true
+      # --entryPoints.web.forwardedHeaders.trustedIPs=172.21.0.1/24
 
     ports:
       # The HTTP port
@@ -19,22 +36,71 @@ services:
     volumes:
       # So that Traefik can listen to the Docker events
       - /var/run/docker.sock:/var/run/docker.sock
-      
+      - ./traefik:/var/log/traefik
+
+
+  wsrs-v3:
+    image: parinyacoj/wsrs-api-v3:tag
+    ports:
+    - "10001:9000"  
+    #scaling  
+    # ports:  
+    #   - "10001-10010:9000"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.wsrs-v3.rule=Host(`wsrs-v3.docker.localhost`)"
+
+
+
+  case-gateway:
+    image: parinyacoj/case-gateway:1.0.1
+    ports:
+    - "9003:9003"  
+    #scaling  
+    # ports:  
+    #   - "10001-10010:9000"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.case-gateway.rule=Host(`case-gateway.docker.localhost`)"
+      - "traefik.http.routers.case-gateway.middlewares=apiKey"
+
+      #API-KEY AUTHEN
+      - "traefik.http.middlewares.apiKey.plugin.traefik-api-key-middleware.authenticationHeader=true"
+      - "traefik.http.middlewares.apiKey.plugin.traefik-api-key-middleware.authenticationheaderName=X-API-KEY"
+      - "traefik.http.middlewares.apiKey.plugin.traefik-api-key-middleware.bearerHeader=true"
+      - "traefik.http.middlewares.apiKey.plugin.traefik-api-key-middleware.bearerHeaderName=Authorization"
+      - "traefik.http.middlewares.apiKey.plugin.traefik-api-key-middleware.removeHeadersOnSuccess=true"
+      - "traefik.http.middlewares.apiKey.plugin.traefik-api-key-middleware.keys=b8e471ed-9f78-4b0e-9f0d-ba3c9339f3b6,ff08048b-ebf9-4dca-b3bd-2935738dd108"  
+
   whoami:
     # A container that exposes an API to show its IP address
     image: traefik/whoami
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.whoami.rule=Host(`whoami.docker.localhost`)"
-      - "traefik.http.services.whoami.loadbalancer.server.port=8080"
       
+      # - "traefik.http.routers.whoami.entrypoints=whoami"
+      # - "traefik.http.routers.whoami.rule=PathPrefix(`/`)"
+      # - "traefik.http.services.whoami.loadbalancer.server.port=8080"
+      - "traefik.http.routers.whoami.rule=Host(`whoami.docker.localhost`) || Path(`/whoami`) || HeadersRegexp(`X-Forwarded-For`, `.+`)"
       - "traefik.http.routers.whoami.middlewares=apiKey"
+      
+      
+      #- "traefik.http.middlewares.real-ip.plugin.traefik-real-ip.excludednets = 1.1.1.1/24"
+      #IP WHITELIST
+      # - "traefik.http.middlewares.whitelist.ipwhitelist.sourcerange=172.21.0.1/24"
+      # - "traefik.http.middlewares.whitelist.ipwhitelist.sourcerange=10.1.23.234"
+
+      #API-KEY AUTHEN
       - "traefik.http.middlewares.apiKey.plugin.traefik-api-key-middleware.authenticationHeader=true"
-      - "traefik.http.middlewares.apiKey.plugin.traefik-api-key-middleware.authenticationheaderName =X-API-KEY"
+      - "traefik.http.middlewares.apiKey.plugin.traefik-api-key-middleware.authenticationheaderName=X-API-KEY"
       - "traefik.http.middlewares.apiKey.plugin.traefik-api-key-middleware.bearerHeader=true"
       - "traefik.http.middlewares.apiKey.plugin.traefik-api-key-middleware.bearerHeaderName=Authorization"
       - "traefik.http.middlewares.apiKey.plugin.traefik-api-key-middleware.removeHeadersOnSuccess=true"
-      - "traefik.http.middlewares.apiKey.plugin.traefik-api-key-middleware.keys=b8e471ed-9f78-4b0e-9f0d-ba3c9339f3b6"
+      - "traefik.http.middlewares.apiKey.plugin.traefik-api-key-middleware.keys=b8e471ed-9f78-4b0e-9f0d-ba3c9339f3b6,ff08048b-ebf9-4dca-b3bd-2935738dd108"  
+
+      # - "traefik.http.middlewares.whitelist.ipwhitelist.ipstrategy.excludedips=10.1.23.234,10.1.23.213"
+      # - "traefik.tcp.middlewares.whitelist.ipwhitelist.sourcerange=127.0.0.1/32, 10.1.23.0/24"      
+      
 
 
 
