@@ -53,9 +53,9 @@ services:
 
 
   case-gateway:
-    image: parinyacoj/case-gateway:1.0.2
+    image: parinyacoj/case-gateway:1.0.3
     ports:
-    - "9003:8000"  
+    - "9003:9003"  
     #scaling  
     # ports:  
     #   - "10001-10010:9000"
