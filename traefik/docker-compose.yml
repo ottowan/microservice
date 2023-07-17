@@ -61,7 +61,7 @@ services:
     #   - "10001-10010:9000"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.case-gateway.rule=Host(`case-gateway.docker.localhost`)"
+      - "traefik.http.routers.case-gateway.rule=Host(`case-gateway.docker.localhost`) || || Path(`/cases`)"
       - "traefik.http.routers.case-gateway.middlewares=apiKey"
 
       #API-KEY AUTHEN
