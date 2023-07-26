@@ -2,6 +2,7 @@ version: '3.7'
 services:
   jaeger:
     image: jaegertracing/all-in-one:latest
+    restart: "always"
     ports:
       - "16686:16686"
       - "14268:14268"

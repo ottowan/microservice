@@ -14,19 +14,11 @@ services:
       --accesslog=true
       --accesslog.filepath=/var/log/traefik/access.log
       --tracing.jaeger=true
-      --tracing.jaeger.samplingServerURL=http://10.1.2.48:5778/sampling
-      --tracing.jaeger.samplingType=const
-      --tracing.jaeger.samplingParam=1.0
       --tracing.jaeger.propagation=jaeger
       --tracing.jaeger.collector.endpoint=http://10.1.2.48:14268/api/traces?format=jaeger.thrift
-
       --experimental.plugins.traefik-api-key-middleware.modulename=github.com/dtomlinson91/traefik-api-key-middleware
       --experimental.plugins.traefik-api-key-middleware.version=v0.1.2
-      # --experimental.plugins.traefik-real-ip.modulename=github.com/soulbalz/traefik-real-ip
-      # --experimental.plugins.traefik-real-ip.version=v1.0.3
-            # --entrypoints.web.address=:80
-      # --entryPoints.web.forwardedHeaders.insecure=true
-      # --entryPoints.web.forwardedHeaders.trustedIPs=172.21.0.1/24
+
     restart: "always"
     ports:
       # The HTTP port
