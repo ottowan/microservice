@@ -6,9 +6,8 @@ services:
     image: traefik:v2.10
     # Enables the web UI and tells Traefik to listen to docker
     command: 
+      --providers.docker=true
       --api.insecure=true 
-      --providers.docker
-
       --log.filePath=/var/log/traefik/traefik.log
       --log.level=DEBUG
       --accesslog=true
@@ -18,6 +17,9 @@ services:
       --tracing.jaeger.collector.endpoint=http://10.1.2.48:14268/api/traces?format=jaeger.thrift
       --experimental.plugins.traefik-api-key-middleware.modulename=github.com/dtomlinson91/traefik-api-key-middleware
       --experimental.plugins.traefik-api-key-middleware.version=v0.1.2
+
+      # --api.dashboard=true
+      # --entrypoints.http.address=:80
 
     restart: "always"
     ports:
@@ -29,6 +31,18 @@ services:
       # So that Traefik can listen to the Docker events
       - /var/run/docker.sock:/var/run/docker.sock
       - ./traefik:/var/log/traefik
+
+    # labels:
+
+
+      # - "traefik.http.routers.traefik-dashboard-http-router.entrypoints: http"
+      # # Enable basic authentication middleware for the dashboard
+      # - "traefik.http.middlewares.traefik-dashboard-auth.basicauth.users=admin:$$2a$$14$$Pn4dBKjJOAAyGwbk4WExgufwp/tgmgnecy6WDNj8FxoyENwdf1woK"
+
+      # # Create a router to handle dashboard traffic and apply the basic auth middleware
+      # - "traefik.http.routers.traefik-dashboard-http-router.rule=Host(`dashboard.docker.localhost`) || Path(/dash)"
+      # - "traefik.http.routers.traefik-dashboard-http-router.service=api@internal"
+      # - "traefik.http.routers.traefik-dashboard-http-router.middlewares: traefik-dashboard-auth"
 
 
   wsrs-v3:
@@ -73,7 +87,7 @@ services:
 
 
   inheritance-service:
-    image: parinyacoj/inheritance-service:1.0.1
+    image: parinyacoj/inheritance-service:1.0.2
     restart: "always"
     # ports:
     # - "9003:9003"  
