@@ -1,4 +1,4 @@
-version: '3'
+version: '3.7'
 
 services:
   traefik:
@@ -67,7 +67,7 @@ services:
     # >> scaling  
     # >>  docker-compose up -d --scale case-gateway=2
     ports:  
-       - "10002-10010:9003"
+       - "10002:9003"
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.case-gateway.rule=Host(`case-gateway.docker.localhost`) || PathPrefix(`/labor`)"
@@ -94,7 +94,7 @@ services:
     # >> scaling  
     # >>  docker-compose up -d --scale case-gateway=2
     ports:  
-       - "10100-10110:8080"
+       - "10003:8080"
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.inheritance-service.rule=Host(`inheritance-service.docker.localhost`) || PathPrefix(`/inherit`)"
