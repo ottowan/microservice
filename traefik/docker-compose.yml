@@ -87,7 +87,7 @@ services:
       # ADD HEADER# Use the forwarded middleware
       - "traefik.http.middlewares.forwardedHeaders.headers.customrequestheaders.X-Real-IP=$${request.headers.X-Real-IP}"
 
-        # Forward client IP
+
   #sหมายบังคับคดี
   exwar-gateway:
     image: parinyacoj/case-gateway:1.0.4
@@ -100,9 +100,9 @@ services:
        - "10004:9003"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.case-gateway.rule=Host(`case-gateway.docker.localhost`) || PathPrefix(`/exwar`)"
+      - "traefik.http.routers.exwar-gateway.rule=Host(`exwar-gateway.docker.localhost`) || PathPrefix(`/exwar`)"
       
-      - "traefik.http.routers.case-gateway.middlewares=regEx,apiKey"
+      - "traefik.http.routers.exwar-gateway.middlewares=regEx,apiKey,forwardedHeaders"
       - "traefik.http.middlewares.regEx.replacepathregex.regex=^/exwar(.*)"
       - "traefik.http.middlewares.regEx.replacepathregex.replacement=/api/v1$${1}"
 
@@ -114,6 +114,8 @@ services:
       - "traefik.http.middlewares.apiKey.plugin.traefik-api-key-middleware.removeHeadersOnSuccess=true"
       - "traefik.http.middlewares.apiKey.plugin.traefik-api-key-middleware.keys=b8e471ed-9f78-4b0e-9f0d-ba3c9339f3b6,ff08048b-ebf9-4dca-b3bd-2935738dd108"  
 
+      # ADD HEADER# Use the forwarded middleware
+      - "traefik.http.middlewares.forwardedHeaders.headers.customrequestheaders.X-Real-IP=$${request.headers.X-Real-IP}"
 
   inheritance-service:
     image: parinyacoj/inheritance-service:1.0.3
