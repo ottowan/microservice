@@ -72,7 +72,7 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.case-gateway.rule=Host(`case-gateway.docker.localhost`) || PathPrefix(`/labor`)"
       
-      - "traefik.http.routers.case-gateway.middlewares=regEx,forwardedHeaders"
+      - "traefik.http.routers.case-gateway.middlewares=regEx,apiKey,forwardedHeaders"
       - "traefik.http.middlewares.regEx.replacepathregex.regex=^/labor(.*)"
       - "traefik.http.middlewares.regEx.replacepathregex.replacement=/api/v1$${1}"
 
