@@ -85,7 +85,11 @@ services:
       - "traefik.http.middlewares.apiKey.plugin.traefik-api-key-middleware.keys=b8e471ed-9f78-4b0e-9f0d-ba3c9339f3b6,ff08048b-ebf9-4dca-b3bd-2935738dd108"  
 
       # ADD HEADER# Use the forwarded middleware
-      - "traefik.http.middlewares.forwardedHeaders.headers.customrequestheaders.X-Real-IP=$${request.headers.X-Real-IP}"
+      - "traefik.http.middlewares.forwardedHeaders.headers.customrequestheaders.X-Real-IP=request.headers.X-Real-IP"
+      - "traefik.http.middlewares.forwardedHeaders.headers.customrequestheaders.X-Script-Name=1"
+      - "traefik.http.middlewares.forwardedHeaders.headers.customrequestheaders.X-Custom-Request-Header=1"
+      - "traefik.http.middlewares.forwardedHeaders.headers.customrequestheaders.system_id=1"
+      - "traefik.http.middlewares.forwardedHeaders.headers.customrequestheaders.system_code=0001"
 
 
   #sหมายบังคับคดี
@@ -115,7 +119,12 @@ services:
       - "traefik.http.middlewares.apiKeyEW.plugin.traefik-api-key-middleware.keys=b8e471ed-9f78-4b0e-9f0d-ba3c9339f3b6,ff08048b-ebf9-4dca-b3bd-2935738dd108"  
 
       # ADD HEADER# Use the forwarded middleware
-      - "traefik.http.middlewares.forwardedHeadersEW.headers.customrequestheaders.X-Real-IP=$${request.headers.X-Real-IP}"
+      - "traefik.http.middlewares.forwardedHeadersEW.headers.customrequestheaders.X-Real-IP=request.headers.X-Real-IP"
+      - "traefik.http.middlewares.forwardedHeadersEW.headers.customrequestheaders.X-Script-Name=2"
+      - "traefik.http.middlewares.forwardedHeadersEW.headers.customrequestheaders.X-Custom-Request-Header=2"
+      - "traefik.http.middlewares.forwardedHeadersEW.headers.customrequestheaders.system_id=2"
+      - "traefik.http.middlewares.forwardedHeadersEW.headers.customrequestheaders.system_code=0002"
+      
 
   inheritance-service:
     image: parinyacoj/inheritance-service:1.0.3
