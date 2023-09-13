@@ -60,7 +60,7 @@ services:
 
 
   case-gateway:
-    image: parinyacoj/case-gateway:1.0.4
+    image: parinyacoj/case-gateway:1.1.0
     restart: "always"
     # ports:
     # - "9003:9003"  
@@ -90,7 +90,7 @@ services:
 
   #sหมายบังคับคดี
   exwar-gateway:
-    image: parinyacoj/case-gateway:1.0.4
+    image: parinyacoj/case-gateway:1.1.0
     restart: "always"
     # ports:
     # - "9003:9003"  
