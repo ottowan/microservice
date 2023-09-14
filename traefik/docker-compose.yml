@@ -60,7 +60,7 @@ services:
 
 
   case-gateway:
-    image: parinyacoj/case-gateway:1.1.0
+    image: parinyacoj/case-gateway:1.1.1
     restart: "always"
     # ports:
     # - "9003:9003"  
@@ -86,15 +86,13 @@ services:
 
       # ADD HEADER# Use the forwarded middleware
       - "traefik.http.middlewares.forwardedHeaders.headers.customrequestheaders.X-Real-IP=request.headers.X-Real-IP"
-      - "traefik.http.middlewares.forwardedHeaders.headers.customrequestheaders.X-Script-Name=1"
-      - "traefik.http.middlewares.forwardedHeaders.headers.customrequestheaders.X-Custom-Request-Header=1"
       - "traefik.http.middlewares.forwardedHeaders.headers.customrequestheaders.system_id=1"
-      - "traefik.http.middlewares.forwardedHeaders.headers.customrequestheaders.system_code=0001"
+      - "traefik.http.middlewares.forwardedHeaders.headers.customrequestheaders.system_code=LABOR"
 
 
   #sหมายบังคับคดี
   exwar-gateway:
-    image: parinyacoj/case-gateway:1.1.0
+    image: parinyacoj/case-gateway:1.1.1
     restart: "always"
     # ports:
     # - "9003:9003"  
@@ -120,10 +118,8 @@ services:
 
       # ADD HEADER# Use the forwarded middleware
       - "traefik.http.middlewares.forwardedHeadersEW.headers.customrequestheaders.X-Real-IP=request.headers.X-Real-IP"
-      - "traefik.http.middlewares.forwardedHeadersEW.headers.customrequestheaders.X-Script-Name=2"
-      - "traefik.http.middlewares.forwardedHeadersEW.headers.customrequestheaders.X-Custom-Request-Header=2"
       - "traefik.http.middlewares.forwardedHeadersEW.headers.customrequestheaders.system_id=2"
-      - "traefik.http.middlewares.forwardedHeadersEW.headers.customrequestheaders.system_code=0002"
+      - "traefik.http.middlewares.forwardedHeadersEW.headers.customrequestheaders.system_code=EXWAR"
       
 
   inheritance-service:
@@ -159,18 +155,9 @@ services:
     restart: "always"
     labels:
       - "traefik.enable=true"
-      
-      # - "traefik.http.routers.whoami.entrypoints=whoami"
-      # - "traefik.http.routers.whoami.rule=PathPrefix(`/`)"
-      # - "traefik.http.services.whoami.loadbalancer.server.port=8080"
       - "traefik.http.routers.whoami.rule=Host(`whoami.docker.localhost`) || Path(`/whoami`) || HeadersRegexp(`X-Forwarded-For`, `.+`)"
       - "traefik.http.routers.whoami.middlewares=apiKey"
-      
-      
-      #- "traefik.http.middlewares.real-ip.plugin.traefik-real-ip.excludednets = 1.1.1.1/24"
-      #IP WHITELIST
-      # - "traefik.http.middlewares.whitelist.ipwhitelist.sourcerange=172.21.0.1/24"
-      # - "traefik.http.middlewares.whitelist.ipwhitelist.sourcerange=10.1.23.234"
+
 
       #API-KEY AUTHEN
       - "traefik.http.middlewares.apiKey.plugin.traefik-api-key-middleware.authenticationHeader=true"
@@ -180,12 +167,4 @@ services:
       - "traefik.http.middlewares.apiKey.plugin.traefik-api-key-middleware.removeHeadersOnSuccess=true"
       - "traefik.http.middlewares.apiKey.plugin.traefik-api-key-middleware.keys=b8e471ed-9f78-4b0e-9f0d-ba3c9339f3b6,ff08048b-ebf9-4dca-b3bd-2935738dd108"  
 
-      # - "traefik.http.middlewares.whitelist.ipwhitelist.ipstrategy.excludedips=10.1.23.234,10.1.23.213"
-      # - "traefik.tcp.middlewares.whitelist.ipwhitelist.sourcerange=127.0.0.1/32, 10.1.23.0/24"      
-      
-
-
-
-      # - "traefik.http.routers.whoami.middlewares=auth"
-      # - "traefik.http.middlewares.auth.basicauth.users=test:$$2y$$12$$ci.4U63YX83CwkyUrjqxAucnmi2xXOIlEF6T/KdP9824f1Rf1iyNG" # credentials test:test
 
