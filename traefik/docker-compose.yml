@@ -70,7 +70,7 @@ services:
        - "10002:9003"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.case-gateway.rule=Host(`case-gateway.docker.localhost`) || PathPrefix(`/labor`) || (Host(`coj-x.coj.intra`) || && Path(`/labor`))"
+      - "traefik.http.routers.case-gateway.rule=Host(`case-gateway.docker.localhost`) || PathPrefix(`/labor`) || (Host(`coj-x.coj.intra`) && Path(`/labor`))"
       
       - "traefik.http.routers.case-gateway.middlewares=regEx,apiKey,forwardedHeaders"
       - "traefik.http.middlewares.regEx.replacepathregex.regex=^/labor(.*)"
@@ -103,7 +103,7 @@ services:
     labels:
       - "traefik.enable=true"
       #- "traefik.http.routers.exwar-gateway.rule=Host(`exwar-gateway.docker.localhost`) || Host(`coj-x.coj.intra`) ||  PathPrefix(`/exwar`)"
-      - "traefik.http.routers.exwar-gateway.rule=Host(`exwar-gateway.docker.localhost`) ||  PathPrefix(`/exwar`) || (Host(`coj-x.coj.intra`) || && Path(`/exwar`)) "
+      - "traefik.http.routers.exwar-gateway.rule=Host(`exwar-gateway.docker.localhost`) ||  PathPrefix(`/exwar`) || (Host(`coj-x.coj.intra`) && Path(`/exwar`)) "
       - "traefik.http.routers.exwar-gateway.middlewares=regExEW,apiKeyEW,forwardedHeadersEW"
       - "traefik.http.middlewares.regExEW.replacepathregex.regex=^/exwar(.*)"
       - "traefik.http.middlewares.regExEW.replacepathregex.replacement=/api/v1$${1}"
