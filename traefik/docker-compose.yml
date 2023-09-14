@@ -85,9 +85,9 @@ services:
       - "traefik.http.middlewares.apiKey.plugin.traefik-api-key-middleware.keys=ff08048b-ebf9-4dca-b3bd-2935738dd108"  
 
       # ADD HEADER# Use the forwarded middleware
-      - "traefik.http.middlewares.forwardedHeaders.headers.customrequestheaders.X-Real-IP=Client-IP"
       - "traefik.http.middlewares.forwardedHeaders.headers.customrequestheaders.system_id=1"
       - "traefik.http.middlewares.forwardedHeaders.headers.customrequestheaders.system_code=LABOR"
+      - "traefik.http.middlewares.forwardedHeaders.headers.customrequestheaders.*=true" # Attach the middleware to your app
 
 
   #sหมายบังคับคดี
