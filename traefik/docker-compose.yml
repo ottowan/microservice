@@ -117,9 +117,9 @@ services:
       - "traefik.http.middlewares.apiKeyEW.plugin.traefik-api-key-middleware.keys=b8e471ed-9f78-4b0e-9f0d-ba3c9339f3b6,ff08048b-ebf9-4dca-b3bd-2935738dd108"  
 
       # ADD HEADER# Use the forwarded middleware
-      - "traefik.http.middlewares.forwardedHeadersEW.headers.customrequestheaders.X-Real-IP=Client-IP"
       - "traefik.http.middlewares.forwardedHeadersEW.headers.customrequestheaders.system_id=2"
       - "traefik.http.middlewares.forwardedHeadersEW.headers.customrequestheaders.system_code=EXWAR"
+      - "traefik.http.middlewares.forwardedHeadersEW.headers.customrequestheaders.*=true" # Attach the middleware to your app
       
 
   inheritance-service:
