@@ -72,17 +72,17 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.case-gateway.rule=Host(`case-gateway.docker.localhost`) || PathPrefix(`/labor`) || (Host(`coj-x.coj.intra`) && Path(`/labor`))"
       
-      - "traefik.http.routers.case-gateway.middlewares=regEx,apiKey,forwardedHeaders"
+      - "traefik.http.routers.case-gateway.middlewares=regEx,apiKeyLB,forwardedHeaders"
       - "traefik.http.middlewares.regEx.replacepathregex.regex=^/labor(.*)"
       - "traefik.http.middlewares.regEx.replacepathregex.replacement=/api/v1$${1}"
 
       #API-KEY AUTHEN                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
-      - "traefik.http.middlewares.apiKey.plugin.traefik-api-key-middleware.authenticationHeader=true"
-      - "traefik.http.middlewares.apiKey.plugin.traefik-api-key-middleware.authenticationheaderName=X-API-KEY"
-      - "traefik.http.middlewares.apiKey.plugin.traefik-api-key-middleware.bearerHeader=true"
-      - "traefik.http.middlewares.apiKey.plugin.traefik-api-key-middleware.bearerHeaderName=Authorization"
-      - "traefik.http.middlewares.apiKey.plugin.traefik-api-key-middleware.removeHeadersOnSuccess=true"
-      - "traefik.http.middlewares.apiKey.plugin.traefik-api-key-middleware.keys=ff08048b-ebf9-4dca-b3bd-2935738dd108"  
+      - "traefik.http.middlewares.apiKeyLB.plugin.traefik-api-key-middleware.authenticationHeader=true"
+      - "traefik.http.middlewares.apiKeyLB.plugin.traefik-api-key-middleware.authenticationheaderName=X-API-KEY"
+      - "traefik.http.middlewares.apiKeyLB.plugin.traefik-api-key-middleware.bearerHeader=true"
+      - "traefik.http.middlewares.apiKeyLB.plugin.traefik-api-key-middleware.bearerHeaderName=Authorization"
+      - "traefik.http.middlewares.apiKeyLB.plugin.traefik-api-key-middleware.removeHeadersOnSuccess=true"
+      - "traefik.http.middlewares.apiKeyLB.plugin.traefik-api-key-middleware.keys=ff08048b-ebf9-4dca-b3bd-2935738dd108"  
 
       # ADD HEADER# Use the forwarded middleware
       - "traefik.http.middlewares.forwardedHeaders.headers.customrequestheaders.system_id=1"
