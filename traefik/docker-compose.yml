@@ -149,7 +149,7 @@ services:
     image: traefik/whoami
         #scaling  
     ports:  
-      - "8000-8002:80"
+      - "8181-8183:80"
     restart: "always"
     labels:
       - "traefik.enable=true"
