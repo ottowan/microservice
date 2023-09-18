@@ -150,7 +150,7 @@ services:
     restart: "always"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.whoami.rule=Host(`whoami.docker.localhost`) || Path(`/whoami`) || HeadersRegexp(`X-Forwarded-For`, `.+`)"
+      - "traefik.http.routers.whoami.rule=Host(`whoami.docker.localhost`) || (Host(`coj-x.coj.intra`) && Path(`/whoami`)) || PathPrefix(`/whoami`)"
       - "traefik.http.routers.whoami.middlewares=apiKey"
 
 
