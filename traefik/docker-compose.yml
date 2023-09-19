@@ -55,7 +55,7 @@ services:
 
 
   case-gateway:
-    image: parinyacoj/case-gateway:1.1.2
+    image: dockerhub.coj.intra/case-gateway:1.1.2
     restart: "always"
     # ports:
     # - "9003:9003"  
@@ -87,7 +87,7 @@ services:
 
   #sหมายบังคับคดี
   exwar-gateway:
-    image: parinyacoj/case-gateway:1.1.2
+    image: dockerhub.coj.intra/case-gateway:1.1.2
     restart: "always"
     # ports:
     # - "9003:9003"  
@@ -118,7 +118,7 @@ services:
       
 
   inheritance-service:
-    image: parinyacoj/inheritance-service:1.0.3
+    image: dockerhub.coj.intra/inheritance-service:1.0.3
     restart: "always"
     # ports:
     # - "9003:9003"  
