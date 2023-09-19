@@ -160,8 +160,8 @@ services:
   go-hello:
     # A container that exposes an API to show its IP address
     image: dockerhub.coj.intra/go-hello:1.0
-    ports:  
-      - "8111:8000"
+    # ports:  
+    #   - "8111:8000"
         #scaling  
     restart: "always"
     labels:
