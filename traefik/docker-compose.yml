@@ -157,5 +157,15 @@ services:
 
 
 
+  go-hello:
+    # A container that exposes an API to show its IP address
+    image: dockerhub.coj.intra/go-hello:1.0
+    ports:  
+      - "8111:8000"
+        #scaling  
+    restart: "always"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.whoami.rule=Host(`whoami.docker.localhost`) || (Host(`coj-x.coj.intra`) && Path(`/go-hello`)) || PathPrefix(`/go-hello`)"
 
 
