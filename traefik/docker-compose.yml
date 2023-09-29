@@ -157,7 +157,7 @@ services:
     image: traefik/whoami
         #scaling  
     ports:  
-      - "8181-8183:80"
+      - target: 80  #auto port
     restart: "always"
     labels:
       - "traefik.enable=true"
@@ -169,7 +169,7 @@ services:
     # A container that exposes an API to show its IP address
     image: dockerhub.coj.intra/go-hello:1.0
     ports:  
-    - "8111:8000"
+      - target: 8000  #auto port
         #scaling  
     restart: "always"
     labels:
@@ -191,7 +191,7 @@ services:
     volumes:
       - ./strapi-app:/usr/src/api
     ports:
-      - "1337:1337"
+      - "9010:1337"
     labels:
       - traefik.enable=true
       - traefik.http.routers.strapi.rule=PathPrefix(`/strapi`) # Change to your domain     
