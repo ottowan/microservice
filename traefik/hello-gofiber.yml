@@ -1,0 +1,23 @@
+version: '3.7'
+
+services:
+  hello-fiber:
+    # A container that exposes an API to show its IP address
+    image: dockerhub.coj.intra/hello-fiber:6.0
+    ports:  
+      - target: 80  #auto port
+    restart: "always"
+    # command: 
+    #   --docker login -u admin -p admin dockerhub.coj.intra
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.hello-fiber.rule=(Host(`coj-x.coj.intra`) && Path(`/hello`)) ||PathPrefix(`/hello`)
+      - traefik.http.routers.hello-fiber.middlewares=regExHF
+      - traefik.http.middlewares.regExHF.replacepathregex.regex=^/hello(.*)
+      - traefik.http.middlewares.regExHF.replacepathregex.replacement=/$${1}
+    networks:
+        - traefik-networks
+
+networks:
+  traefik-networks:
+    driver: bridge
