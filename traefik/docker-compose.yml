@@ -60,7 +60,7 @@ services:
         - traefik-networks
 
   case-gateway:
-    image: dockerhub.coj.intra/case-gateway:1.1.2
+    image: dockerhub.coj.intra/case-gateway:1.0
     restart: "always"
     # ports:
     # - "9003:9003"  
@@ -93,7 +93,7 @@ services:
 
   #sหมายบังคับคดี
   exwar-gateway:
-    image: dockerhub.coj.intra/case-gateway:1.1.2
+    image: dockerhub.coj.intra/case-gateway:1.0
     restart: "always"
     # ports:
     # - "9003:9003"  
