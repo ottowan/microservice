@@ -85,8 +85,8 @@ services:
       - "traefik.http.middlewares.apiKeyLB.plugin.traefik-api-key-middleware.keys=ff08048b-ebf9-4dca-b3bd-2935738dd108"  
 
       # ADD HEADER# Use the forwarded middleware
-      - "traefik.http.middlewares.forwardedHeaders.headers.customrequestheaders.system_id=1"
-      - "traefik.http.middlewares.forwardedHeaders.headers.customrequestheaders.system_code=LABOR"
+      - "traefik.http.middlewares.forwardedHeaders.headers.customrequestheaders.system-id=1"
+      - "traefik.http.middlewares.forwardedHeaders.headers.customrequestheaders.system-code=LABOR"
       - "traefik.http.middlewares.forwardedHeaders.headers.customrequestheaders.*=true" # Attach the middleware to your app
     networks:
         - traefik-networks
@@ -118,8 +118,8 @@ services:
       - "traefik.http.middlewares.apiKeyEW.plugin.traefik-api-key-middleware.keys=b8e471ed-9f78-4b0e-9f0d-ba3c9339f3b6"  
 
       # ADD HEADER# Use the forwarded middleware
-      - "traefik.http.middlewares.forwardedHeadersEW.headers.customrequestheaders.system_id=2"
-      - "traefik.http.middlewares.forwardedHeadersEW.headers.customrequestheaders.system_code=EXWAR"
+      - "traefik.http.middlewares.forwardedHeadersEW.headers.customrequestheaders.system-id=2"
+      - "traefik.http.middlewares.forwardedHeadersEW.headers.customrequestheaders.system-code=EXWAR"
       - "traefik.http.middlewares.forwardedHeadersEW.headers.customrequestheaders.*=true" # Attach the middleware to your app
     networks:
         - traefik-networks
