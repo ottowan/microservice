@@ -63,6 +63,9 @@ services:
       - "traefik.http.middlewares.forwardedHeadersEW.headers.customrequestheaders.system-id=2"
       - "traefik.http.middlewares.forwardedHeadersEW.headers.customrequestheaders.system-code=EXWAR"
       - "traefik.http.middlewares.forwardedHeadersEW.headers.customrequestheaders.*=true" # Attach the middleware to your app
+
+      # - "traefik.http.middlewares.jaeger-tracing.tracing=true"
+
     networks:
         - traefik-networks
 networks:

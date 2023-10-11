@@ -1,0 +1,14 @@
+version: "3.8"
+services:
+  app:
+    image: jc21/registry-ui
+    ports:
+      - 9090:80
+    environment:
+      - REGISTRY_HOST=dockerhub.coj.intra:5000
+      - REGISTRY_SSL=false
+      - REGISTRY_DOMAIN=dockerhub.coj.intra:5000
+      - REGISTRY_STORAGE_DELETE_ENABLED=true      
+      - REGISTRY_USER=admin
+      - REGISTRY_PASS=admin
+    restart: always

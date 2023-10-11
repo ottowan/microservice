@@ -19,12 +19,17 @@ services:
       --experimental.plugins.traefik-api-key-middleware.version=v0.1.2
       --experimental.plugins.AddForwardedHeader.moduleName=github.com/jerrywoo96/AddForwardedHeader
       --experimental.plugins.AddForwardedHeader.version=v1.0.1
+      # --metrics.prometheus=true
+      # --metrics.prometheus.addEntryPointsLabels=true
+      # --entryPoints.metrics.address=:8082
+      # --metrics.prometheus.entryPoint=metrics
       # --api.dashboard=true
       # --entrypoints.http.address=:80
 
-
     restart: "always"
     ports:
+      # - 80: 80  #auto port
+      # - 8888: 8080  #auto port
       # The HTTP port
       - "7777:80"
       # The Web UI (enabled by --api.insecure=true)
@@ -33,7 +38,6 @@ services:
       # So that Traefik can listen to the Docker events
       - /var/run/docker.sock:/var/run/docker.sock
       - ./traefik:/var/log/traefik
-
     networks:
         - traefik-networks
 
@@ -43,7 +47,17 @@ services:
       # # get md5 from htpasswd or http://www.htaccesstools.com/htpasswd-generator/
       # # and then double all $ to $$ to avoid docker-compose 
       # traefik.frontend.auth.basic: "admin:$$apr1$$ew5qgo9d$$KfzaFvWP4uRnyHvCwr6C7."
-
+  # prometheus:
+  #     image: prom/prometheus:v2.30.0
+  #     ports:
+  #       - "9898:9090"
+  #     volumes:
+  #       - ./prometheus:/etc/prometheus
+  #     command:
+  #       - --config.file=/etc/prometheus/prometheus.yml
+  #       - --storage.tsdb.path=/prometheus
+  #     networks:
+  #       - traefik-networks
 
   wsrs-v3:
     image: parinyacoj/wsrs-api-v3:tag
@@ -96,7 +110,7 @@ services:
     restart: "always"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.whoami.rule=(Host(`coj-x.coj.intra`) && Path(`/whoami`)) || PathPrefix(`/whoami`)"
+      - "traefik.http.routers.whoami.rule=(Host(`coj-x.coj.intra`) && Path(`/whoami`)) || PathPrefix(`/whoami`) || (Host(`coj-x.docker.localhost`) && Path(`/whoami`))"
     networks:
         - traefik-networks
 
