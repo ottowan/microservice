@@ -79,9 +79,9 @@ services:
     # ports:
     # - "9003:9003"  
     # >> scaling  
-    # >>  docker-compose up -d --scale case-gateway=2
+    # >>  docker-compose up -d --scale inheritance-service=3
     ports:  
-       - "10003:8080"
+      - target: 8080  
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.inheritance-service.rule=(Host(`coj-x.coj.intra`) && Path(`/inherit`)) || PathPrefix(`/inherit`)"
