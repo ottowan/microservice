@@ -5,11 +5,13 @@ services:
     container_name: 'rabbitmq'
     restart: "always"
     ports:
-        - 9008:5672
-        - 15672:15672
-        - 15670:15670
-        - 15674:15674
-        - 61613:61613 # Expose the necessary port for WebStomp
+        - 9008:5672    #AMQP port >> RABBITMQ
+        - 15672:15672  #MANAGEMENT UI
+        - 15670:15670  #sample websocket
+        - 15675:15675  #MQTT websocket port
+        - 1883:1883   #mqtt client
+        # - 15674:15674  #STOMP websocket port
+        # - 61613:61613 # Expose the necessary port for WebStomp client
     volumes:
         - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
         - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
