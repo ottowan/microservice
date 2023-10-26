@@ -4,7 +4,7 @@ services:
     image: rabbitmq:3.12.7-management
     container_name: 'rabbitmq'
     restart: "always"
-    ports:
+    ports:git
         - 9008:5672
         - 15672:15672
         - 15670:15670
