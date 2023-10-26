@@ -1,15 +1,22 @@
 version: "3.2"
 services:
   rabbitmq:
-    image: rabbitmq:3-management-alpine
+    image: rabbitmq:3.12.7-management
     container_name: 'rabbitmq'
     restart: "always"
     ports:
         - 9008:5672
         - 15672:15672
+        - 15670:15670
+        - 15674:15674
+        - 61613:61613 # Expose the necessary port for WebStomp
     volumes:
         - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
         - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+    command: rabbitmq-server
+    build:
+      context: .
+      dockerfile: Dockerfile
     networks:
         - rabbitmq_go_net
 
